@@ -77,9 +77,9 @@ Das Skript liefert automatisch aktuelle Wetterinformationen und kann bei Bedarf 
 
 ---
 
-# ==============================================================================
-# Dokumentstatus : Teilweise KI-generiert & manuell überarbeitet
-# KI-Beteiligung : 6 / 10 (10 = vollständig KI-generiert · 0 = ausschließlich menschlich)
-# Verwendetes Modell: OpenAI GPT-4o-latest (ChatGPT)
-# ==============================================================================
+> ==============================================================================
+> Dokumentstatus : Teilweise KI-generiert & manuell überarbeitet
+> KI-Beteiligung : 6 / 10 (10 = vollständig KI-generiert · 0 = ausschließlich menschlich)
+> Verwendetes Modell: OpenAI GPT-4o-latest (ChatGPT)
+> ==============================================================================
 
