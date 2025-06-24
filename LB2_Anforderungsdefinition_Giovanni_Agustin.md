@@ -4,7 +4,7 @@
 
 | **Klasse** | **Team**          |
 | ---------- | ----------------- |
-| PE         | Giovanni, Agustin |
+| PE-24c     | Giovanni, Agustin |
 
 ---
 
