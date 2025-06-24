@@ -39,6 +39,10 @@ Das Skript liefert automatisch aktuelle Wetterinformationen und kann bei Bedarf 
 | **Weiterreichung (Log/Warn)** | Ergebnisse in Log- bzw. Warn-Dateien schreiben |
 | **Sicherheitsaspekte**        | Keine API-Keys im Code; Logs enthalten keine sensitiven Daten |
 
+
+### Testing (ADD FILE PATHS OF GITHUB)
+Work in progress..
+
 ---
 
 ### Skizze / Mock-up
