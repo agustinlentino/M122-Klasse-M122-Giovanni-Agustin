@@ -1,91 +1,80 @@
----
+## Team
 
-# Teilnehmer/innen des Teams
-
-| **Klasse** | **Team**          |
-| ---------- | ----------------- |
-| PE-24c     | Giovanni, Agustin |
+| Klasse | Team              |
+| :----: | :---------------- |
+| PE-24c | Giovanni, Agustin |
 
 ---
 
-# Anforderungsdefinition mit KI-Einsatz (Meilenstein A)
+## Anforderungsdefinition mit KI-Einsatz (Meilenstein A)
 
-| **Projektname**                | **Fachlicher Inhalt**                                                                                                                                                                                                                                                                                                                                  |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Wetter-Automation mit Bash** | Dieses Projekt automatisiert die Abfrage und Analyse von Wetterdaten mittels kostenloser APIs. Das System fragt täglich Wetterdaten für einen gewählten Standort ab, analysiert sie (z. B. Temperaturtrend, Regenwahrscheinlichkeit) und erzeugt daraus Logmeldungen oder Warnungen. Optional kann bei Grenzwerten auch eine E-Mail verschickt werden. |
+| Projektname                 | Fachlicher Inhalt |
+| :-------------------------- | :---------------- |
+| **Wetter-Automation mit Bash** | Dieses Projekt automatisiert die Abfrage und Analyse von Wetterdaten mittels kostenloser APIs. Das System fragt täglich Wetterdaten für einen gewählten Standort ab, analysiert sie (z. B. Temperaturtrend, Regenwahrscheinlichkeit) und erzeugt daraus Logmeldungen oder Warnungen. Optional kann bei Grenzwerten auch eine E-Mail verschickt werden. |
 
 ---
 
 ### Kundennutzen
 
-Das Skript liefert automatisch aktuelle Wetterinformationen und kann bei Bedarf Warnmeldungen ausgeben – ideal für Nutzer, die auf Wetterdaten angewiesen sind, z. B. für Beruf, Freizeit oder automatisierte Abläufe (Gartenbewässerung, Kleidungsauswahl etc.).
+Das Skript liefert automatisch aktuelle Wetterinformationen und kann bei Bedarf Warnmeldungen ausgeben – ideal für Nutzer, die auf Wetterdaten angewiesen sind, etwa für Beruf, Freizeit oder automatisierte Abläufe (z. B. Gartenbewässerung, Kleidungsauswahl).
 
 ---
 
-### Setup und Automation
+### Setup & Automation
 
-* Der Dienst basiert auf einem freien Webservice wie **Open-Meteo**.
-* Das **Bash-Skript läuft auf einem Linux-System** (z. B. VM oder Raspberry Pi).
-* Ein täglicher **Cronjob** startet das Skript automatisch.
-* Funktionen: Rohdaten abfragen, analysieren, lesbar ausgeben und bei Bedarf warnen.
-
----
-
-### Detaillierte Beschreibung der einzelnen Aspekte
-
-* **Konfiguration (`.cfg`)**
-  Enthält Standort, Grenzwerte, API-URL, E-Mail-Adresse etc.
-
-* **Get-Prozedur (`.raw`)**
-  Abfrage der Wetterdaten per `curl`, Speicherung als JSON.
-
-* **Verarbeitung (`process`)**
-  Analyse mit `jq` – Temperaturvergleich, Regencheck etc.
-
-* **Weiterreichung (`.fmt`)**
-  Zusammenfassung der Daten in einer Log- und einer Warn-Datei.
-
-* **Sicherheitsaspekte**
-  Kein API-Key im Code – nur in der `.cfg`-Datei; Logs enthalten keine sensiblen Daten.
+* Freier Webservice **Open-Meteo**
+* **Bash-Skript** läuft auf einem Linux-System (VM, Raspberry Pi u. a.)
+* Täglicher **Cronjob** startet das Skript automatisch
+* Funktionen: Daten holen, analysieren, ausgeben, Warnungen erzeugen
 
 ---
 
-### (Skizze / Mockup)
+### Detaillierte Aspekte
 
-🗂️ [Systemdesign-Diagramm (Miro Board)](https://gitlab.com/ch-tbz-it/Stud/m122/-/blob/main/10_Projekte_LB2/m122-Projekte.rtb)
+| Baustein                      | Zweck |
+| :---------------------------- | :---- |
+| **Konfiguration (`.cfg`)**    | Standort, Grenzwerte, API-URL, E-Mail usw. |
+| **Get-Prozedur (`curl`)**     | Wetterdaten abrufen, als JSON speichern |
+| **Verarbeitung (`jq`)**       | Temperatur- & Regenanalyse, Grenzwerte prüfen |
+| **Weiterreichung (Log/Warn)** | Ergebnisse in Log- bzw. Warn-Dateien schreiben |
+| **Sicherheitsaspekte**        | Keine API-Keys im Code; Logs enthalten keine sensitiven Daten |
 
 ---
 
-### Erkenntnisse aus der Machbarkeitsabklärung
+### Skizze / Mock-up
 
-* Wetter-API erfolgreich mit `curl` abgefragt
-* Verarbeitung des JSONs mit `jq` getestet
-* String-Vergleiche in Bash funktionieren wie geplant
-* Cronjob-Test auf Linux-System war erfolgreich
+🗂️ [Systemdesign-Diagramm (Miro Board)](https://miro.com/app/board/uXjVIn7XoJ4=/?share_link_id=200344253516)
+
+---
+
+### Erkenntnisse der Machbarkeitsabklärung
+
+* Wetter-API erfolgreich mit `curl` abgefragt  
+* JSON-Verarbeitung mit `jq` getestet  
+* String-Vergleiche in Bash funktionieren wie geplant  
+* Cronjob-Test auf Linux war erfolgreich
 
 ---
 
 ### Kriterien
 
-| **MUSS-Kriterien**                                            | **KANN-Kriterien**                       |
-| ------------------------------------------------------------- | ---------------------------------------- |
-| - API-Abfrage mit `curl`                                      | - E-Mail-Versand bei Wetterwarnung       |
-| - JSON-Verarbeitung mit `jq`                                  | - Export als ZIP oder JSON               |
-| - Nutzung einer `.cfg`-Konfigurationsdatei                    | - Vergleich mehrerer Städte              |
-| - Schreiben einer Logdatei                                    | - Darstellung in HTML oder Web-Interface |
-| - Ausgabe von Wetterwarnungen in separater Datei              |                                          |
-| - Automatisierung durch Cronjob                               |                                          |
-| - Tests mit Regen/kein Regen und hohen/niedrigen Temperaturen |                                          |
+| **MUSS-Kriterien**                                 | **KANN-Kriterien**             |
+| :------------------------------------------------- | :----------------------------- |
+| API-Abfrage mit `curl`                             | E-Mail-Versand bei Warnung     |
+| JSON-Verarbeitung mit `jq`                         | Export als ZIP oder JSON       |
+| Nutzung einer `.cfg`-Datei                         | Vergleich mehrerer Städte      |
+| Schreiben einer Logdatei                           | Darstellung in HTML/Web-GUI    |
+| Ausgabe von Wetterwarnungen in separater Datei     |                                |
+| Automatisierung durch Cronjob                      |                                |
+| Tests: Regen/kein Regen, hohe/niedrige Temperaturen|                                |
 
 ---
 
 ### Hinweise
 
-* Ein **UML-Aktivitätsdiagramm** wird zur Darstellung des Ablaufs erstellt.
-* Durch **KI generierter Code** wird im Skript kommentiert (z. B. `# GPT-4 erstellt`) und funktional getestet.
+* Ein **UML-Aktivitätsdiagramm** zeigt den Ablauf.  
+* KI-generierter Code wird klar kommentiert (z. B. `# GPT-4 erstellt`) und funktional getestet.
 
 ---
 
-✅ **#GPT-4o erstellt** 
-
----
+✅ **#GPT-4o erstellt**
