@@ -1,0 +1,10 @@
+[2025-06-24 14:02:44] [WEATHER] Location='Zurich, Switzerland' Temp='28.6°C' Condition='Mainly clear' Humidity='43%' Wind='11.2km/h@310°'
+[2025-06-24 14:05:13] [ERROR] Failed to get coordinates for: --remove, -cron
+[2025-06-24 14:05:13] [ERROR] Location '--remove, -cron' not found
+[2025-06-24 14:06:21] [WEATHER] Location='Zurich, Switzerland' Temp='28.6°C' Condition='Mainly clear' Humidity='43%' Wind='11.2km/h@310°'
+[2025-06-24 14:07:02] [WEATHER] Location='Zurich, Switzerland' Temp='28.6°C' Condition='Mainly clear' Humidity='43%' Wind='11.2km/h@310°'
+[2025-06-24 14:08:02] [WEATHER] Location='Zurich, Switzerland' Temp='28.6°C' Condition='Mainly clear' Humidity='43%' Wind='11.2km/h@310°'
+[2025-06-24 14:09:02] [WEATHER] Location='Zurich, Switzerland' Temp='28.6°C' Condition='Mainly clear' Humidity='43%' Wind='11.2km/h@310°'
+[2025-06-24 14:10:02] [WEATHER] Location='Zurich, Switzerland' Temp='28.6°C' Condition='Mainly clear' Humidity='43%' Wind='11.2km/h@310°'
+[2025-06-24 14:11:02] [WEATHER] Location='Zurich, Switzerland' Temp='28.6°C' Condition='Mainly clear' Humidity='43%' Wind='11.2km/h@310°'
+[2025-06-26 12:18:17] [WEATHER] Location='Zurich, Switzerland' Temp='24.5°C' Condition='Slight rain showers' Humidity='57%' Wind='15.8km/h@300°'
