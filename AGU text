@@ -21,3 +21,8 @@ setup_github_repo() {
         return 0
     fi
     # remainder of the function…
+
+
+EMAIL_ENABLED="true"                            # <– already exists, make sure it's true
+EMAIL_RECIPIENTS="agustin@example.com,giovanni@example.com"
+EMAIL_SEND_ALWAYS="true"                        # <– NEW: send mail always, not just on warning
