@@ -26,3 +26,41 @@ setup_github_repo() {
 EMAIL_ENABLED="true"                            # <– already exists, make sure it's true
 EMAIL_RECIPIENTS="agustin@example.com,giovanni@example.com"
 EMAIL_SEND_ALWAYS="true"                        # <– NEW: send mail always, not just on warning
+
+
+
+# ==============================================================================
+# EMAIL REPORT FUNCTION
+# ==============================================================================
+
+send_email_report() {
+    if [[ "$EMAIL_ENABLED" != "true" ]]; then
+        log_debug "E-mail disabled in config"
+        return 0
+    fi
+
+    if ! command -v mail >/dev/null 2>&1; then
+        log_warn "No 'mail' command installed – can’t send report"
+        return 0
+    fi
+
+    local recipients
+    recipients=$(echo "$EMAIL_RECIPIENTS" | tr ',' ' ')
+
+    local subject="🌤️ Daily Weather Report"
+    local body="Weather report generated $(date '+%Y-%m-%d %H:%M:%S')
+
+Location   : $DEFAULT_CITY, $DEFAULT_COUNTRY
+Temperature: ${temperature:-N/A}°C
+Humidity   : ${humidity:-N/A}%
+Wind       : ${wind_speed:-N/A} km/h
+
+-- This message was sent automatically by the Weather-Monitor script."
+
+    log_info "Sending e-mail report to $EMAIL_RECIPIENTS"
+    if echo "$body" | mail -s "$subject" $recipients; then
+        log_info "E-mail sent successfully"
+    else
+        log_warn "E-mail failed"
+    fi
+}
