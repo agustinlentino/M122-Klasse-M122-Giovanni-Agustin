@@ -7,3 +7,8 @@ git remote set-url origin \
 
 # verify
 git remote -v
+
+
+export PAT=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
+curl -u "x-access-token:$PAT" \
+     https://api.github.com/repos/LieutenantJimmy/M122-Klasse-M122-Giovanni-Agustin
