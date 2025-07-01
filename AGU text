@@ -2,10 +2,8 @@
 auth_url="https://x-access-token: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@github.com/LieutenantJimmy/M122-Klasse-M122-Giovanni-Agustin.git"
 
 
-cd /path/to/M122-Klasse-M122-Giovanni-Agustin
+git remote set-url origin \
+  "https://x-access-token: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@github.com/LieutenantJimmy/M122-Klasse-M122-Giovanni-Agustin.git"
 
-# set the remote URL to include the token as password
-git remote set-url origin "https://x-access-token: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@github.com/LieutenantJimmy/M122-Klasse-M122-Giovanni-Agustin.git"
-
-# test
-git push origin main
+# verify
+git remote -v
