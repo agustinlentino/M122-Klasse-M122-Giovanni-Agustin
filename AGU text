@@ -1464,6 +1464,9 @@ main() {
     
     log_info "Weather script completed successfully"
     
+    #Send Emails
+    send_email_report
+    
     # Push logs to GitHub if enabled
     push_logs_to_github
 }
