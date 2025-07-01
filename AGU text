@@ -12,3 +12,12 @@ git remote -v
 export PAT=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
 curl -u "x-access-token:$PAT" \
      https://api.github.com/repos/LieutenantJimmy/M122-Klasse-M122-Giovanni-Agustin
+
+
+setup_github_repo() {
+    # ----- add safe-token check here -----
+    if [ -z "$GITHUB_TOKEN" ] || [ "${#GITHUB_TOKEN}" -lt 40 ]; then
+        log_warn "GitHub token not set or invalid – skipping Git sync"
+        return 0
+    fi
+    # remainder of the function…
