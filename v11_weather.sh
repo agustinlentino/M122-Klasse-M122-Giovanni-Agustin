@@ -12,7 +12,7 @@ LOG_FILE="$SCRIPT_DIR/weather.log"
 ERROR_LOG_FILE="$SCRIPT_DIR/error.log"
 
 # GitHub configuration
-GITHUB_TOKEN="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"
+GITHUB_TOKEN="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"
 GITHUB_REPO_URL="https://github.com/LieutenantJimmy/M122-Klasse-M122-Giovanni-Agustin.git"
 GITHUB_REPO_NAME="M122-Klasse-M122-Giovanni-Agustin"
 GITHUB_BRANCH="main"
@@ -180,6 +180,12 @@ check_git_dependency() {
 
 # Clone or update GitHub repository
 setup_github_repo() {
+    # ----- add safe-token check here -----
+    if [ -z "$GITHUB_TOKEN" ] || [ "${#GITHUB_TOKEN}" -lt 40 ]; then
+        log_warn "GitHub token not set or invalid – skipping Git sync"
+        return 0
+    fi
+    # remainder of the function…
     if [ "$ENABLE_GITHUB_SYNC" -ne 1 ]; then
         log_debug "GitHub sync disabled in configuration"
         return 0
@@ -192,7 +198,7 @@ setup_github_repo() {
     fi
     
     # Prepare authenticated URL
-    local auth_url="https://${GITHUB_TOKEN}@github.com/LieutenantJimmy/M122-Klasse-M122-Giovanni-Agustin.git"
+    local auth_url="https://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@github.com/LieutenantJimmy/M122-Klasse-M122-Giovanni-Agustin.git"
     
     if [ -d "$REPO_DIR" ]; then
         # Repository exists, update it
@@ -722,6 +728,43 @@ EOF
     fi
 }
 
+# ==============================================================================
+# EMAIL REPORT FUNCTION
+# ==============================================================================
+
+send_email_report() {
+    if [[ "$EMAIL_ENABLED" != "true" ]]; then
+        log_debug "E-mail disabled in config"
+        return 0
+    fi
+
+    if ! command -v mail >/dev/null 2>&1; then
+        log_warn "No 'mail' command installed – can’t send report"
+        return 0
+    fi
+
+    local recipients
+    recipients=$(echo "$EMAIL_RECIPIENTS" | tr ',' ' ')
+
+    local subject="🌤️ Daily Weather Report"
+    local body="Weather report generated $(date '+%Y-%m-%d %H:%M:%S')
+
+Location   : $DEFAULT_CITY, $DEFAULT_COUNTRY
+Temperature: ${temperature:-N/A}°C
+Humidity   : ${humidity:-N/A}%
+Wind       : ${wind_speed:-N/A} km/h
+
+-- This message was sent automatically by the Weather-Monitor script."
+
+    log_info "Sending e-mail report to $EMAIL_RECIPIENTS"
+    if echo "$body" | mail -s "$subject" $recipients; then
+        log_info "E-mail sent successfully"
+    else
+        log_warn "E-mail failed"
+    fi
+}
+
+
 # =============================================================================
 # CRONJOB MANAGEMENT (keeping existing functions)
 # =============================================================================
@@ -759,6 +802,7 @@ load_config() {
     log_debug "Configuration loaded from: $CONFIG_FILE"
     log_debug "DEFAULT_CITY: $DEFAULT_CITY, DEFAULT_COUNTRY: $DEFAULT_COUNTRY, DEBUG: $DEBUG"
 }
+
 
 # =============================================================================
 # WEATHER CODE MAPPING (for display)
@@ -836,6 +880,53 @@ check_dependencies() {
     fi
     
     log_info "Dependencies check passed"
+}
+
+# Check if 'mail' command is installed and install 'mailutils' if needed
+check_mail_dependency() {
+    if ! command -v mail &> /dev/null; then
+        echo "📦 'mail' command not found. Installing mailutils..." >&2
+        log_info "'mail' not found, attempting to install mailutils"
+
+        # Detect OS and install mailutils or equivalent
+        if command -v apt &> /dev/null; then
+            # Debian/Ubuntu
+            sudo apt update && sudo apt install -y mailutils
+        elif command -v yum &> /dev/null; then
+            # CentOS/RHEL
+            sudo yum install -y mailx
+        elif command -v dnf &> /dev/null; then
+            # Fedora
+            sudo dnf install -y mailx
+        elif command -v pacman &> /dev/null; then
+            # Arch Linux
+            sudo pacman -S --noconfirm mailutils
+        elif command -v brew &> /dev/null; then
+            # macOS
+            brew install mailutils
+        else
+            echo "❌ Cannot automatically install mailutils. Please install it manually:" >&2
+            echo "   Ubuntu/Debian: sudo apt install mailutils" >&2
+            echo "   RHEL/CentOS:   sudo yum install mailx" >&2
+            echo "   Fedora:        sudo dnf install mailx" >&2
+            echo "   Arch:          sudo pacman -S mailutils" >&2
+            log_error "Failed to auto-install mailutils - unsupported package manager"
+            return 1
+        fi
+
+        # Verify installation
+        if command -v mail &> /dev/null; then
+            echo "✅ mailutils installed successfully" >&2
+            log_info "mailutils installed successfully"
+        else
+            echo "❌ Failed to install mailutils" >&2
+            log_error "Failed to install mailutils"
+            return 1
+        fi
+    fi
+
+    log_debug "Mail dependency check passed"
+    return 0
 }
 
 # =============================================================================
@@ -1339,6 +1430,7 @@ main() {
     
     # Check dependencies
     check_dependencies
+    check_mail_dependency
     
     # Get coordinates
     local coordinates
@@ -1371,6 +1463,9 @@ main() {
     display_weather "$weather_data" "$city" "$country" "$is_cron"
     
     log_info "Weather script completed successfully"
+    
+    #Send Emails
+    send_email_report
     
     # Push logs to GitHub if enabled
     push_logs_to_github
