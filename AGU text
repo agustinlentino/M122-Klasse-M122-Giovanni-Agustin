@@ -64,6 +64,3 @@ Wind       : ${wind_speed:-N/A} km/h
         log_warn "E-mail failed"
     fi
 }
-
-
-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
